@@ -1,0 +1,35 @@
+<%- include("./head.ejs")  %> 
+アカウントが存在しない場合は新規作成します
+<br/>
+<script>
+    function whenclick(){
+        const body = JSON.stringify({
+            name: document.getElementById("name").value,
+            password: document.getElementById("password").value
+        })
+        fetch("/api/login",{method:"post",body,headers:{"Content-Type": "application/json; charset=utf-8"}})
+            .then(r => r.json())
+            .then(j => {
+                if(j.ok){
+                    document.cookie = `token=${j.token}`
+                    document.getElementById("p").innerText = "";
+                    document.location = "/"
+                }else{
+                    document.getElementById("p").innerText = j.text
+                }
+            })
+    }
+    window.whenclick = whenclick;
+</script>
+<style>
+    p {
+        color: red;
+    }
+</style>
+<p id="p"></p>
+<input type="text" maxlength="16" minlength="4" id="name" placeholder="名前" required/>
+<br/>
+<input type="password" maxlength="32" minlength="8" id="password" placeholder="パスワード" required/>
+<br/>
+<button onclick="whenclick()">ログイン</button>
+<%- include("./foot.ejs")  %> 

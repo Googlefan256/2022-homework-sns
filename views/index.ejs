@@ -1,0 +1,29 @@
+<%- include("./head.ejs")  %> 
+DMを開けます
+<br/>
+<script>
+    function whenclick(){
+        const name = document.getElementById("name").value;
+        fetch(`/api/opendm/${encodeURIComponent(name)}`)
+            .then(r => r.json())
+            .then(j => {
+                if(j.ok){
+                    document.getElementById("p").innerText = ""
+                    document.location = `/dm/${encodeURIComponent(j.domain)}/${encodeURIComponent(j.id)}`
+                }else{
+                    document.getElementById("p").innerText = j.text
+                }
+            })
+    }
+    window.whenclick = whenclick;
+</script>
+<style>
+    p#p {
+        color: red;
+    }
+</style>
+<p id="p"></p>
+<p>ユーザー名@ドメイン名形式もしくはユーザー名のみ</p>
+<input type="text" maxlength="350" minlength="8" id="name" placeholder="相手のアドレス" required/>
+<button onclick="whenclick()">DMを開く</button>
+<%- include("./foot.ejs")  %> 

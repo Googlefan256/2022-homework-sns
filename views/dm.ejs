@@ -1,0 +1,27 @@
+<%- include("./head.ejs")  %> 
+DMを開けます
+<br/>
+<script>
+    function whenclick(){
+        const content = document.getElementById("content").value;
+        fetch(`/api/senddm/<%= domain %>/<%= id %>`)
+            .then(r => r.json())
+            .then(j => {
+                if(j.ok){
+                    document.getElementById("p").innerText = "送信しました"
+                }else{
+                    document.getElementById("p").innerText = j.text
+                }
+            })
+    }
+    window.whenclick = whenclick;
+</script>
+<style>
+    p#p {
+        color: red;
+    }
+</style>
+<p id="p"></p>
+<input type="text" id="content" placeholder="内容" required/>
+<button onclick="whenclick()">送信</button>
+<%- include("./foot.ejs")  %> 
